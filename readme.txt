@@ -1,6 +1,6 @@
 sudo apt update
 sudo apt install python3-pip
-sudo ufw allow 37945
+sudo ufw allow 443
 pip install -r requirements.txt
 
 
