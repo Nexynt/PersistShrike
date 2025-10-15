@@ -1,0 +1,28 @@
+[package]
+name = "reverse_shell"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+rand = "0.8"
+winapi = { version = "0.3", features = [
+    "winbase", 
+    "handleapi", 
+    "processthreadsapi", 
+    "fileapi", 
+    "winnt", 
+    "debugapi", 
+    "wincon",
+    "sysinfoapi",
+    "namedpipeapi",
+    "minwinbase",
+    "winuser"
+] }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
