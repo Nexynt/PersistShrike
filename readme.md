@@ -1,4 +1,3 @@
-```markdown
 # 🐍 Reverse Shell (Python Server & Rust Client)
 
 This project is a simple yet effective reverse shell, consisting of a Python server for managing connections and a Rust-based client for the Windows operating system. This tool is designed for **educational purposes and penetration testing**.
@@ -35,6 +34,7 @@ Follow these steps on your Ubuntu server:
 1.  First, update your system and install `pip`:
     ```bash
     sudo apt update
+    sudo apt install python3
     sudo apt install python3-pip
     ```
 
@@ -49,8 +49,12 @@ Follow these steps on your Ubuntu server:
     ```bash
     pip install -r requirements.txt
     ```
+    or
+    ```bash
+    pip install pycryptodome
+    ```
 
-5.  Run the server:
+6.  Run the server:
     ```bash
     python3 server.py
     ```
@@ -70,7 +74,7 @@ To build the `.exe` file that will run on the target Windows system, follow thes
 1.  Ensure you have installed the prerequisites for **Rust** and **Visual Studio Build Tools**.
 
 2.  Navigate to the client directory in the project:
-    ```bash
+    ```cmd
     cd reverse_shell
     ```
 
@@ -90,6 +94,7 @@ To build the `.exe` file that will run on the target Windows system, follow thes
     ```
     target\x86_64-pc-windows-msvc\release\reverse_shell.exe
     ```
+7.  rename reverse_shell.exe to WindowsUpdateService.exe (Sugguested)
 
 > **⚠️ Important Warning:** Never run the `reverse_shell.exe` file on your own machine! This file is designed to be executed on the target system. For testing, always use a virtual machine.
 
