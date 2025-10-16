@@ -1,4 +1,6 @@
 ---
+```bash
+npm install
 
 ```markdown
 # 🐍 Reverse Shell (Python Server & Rust Client)
